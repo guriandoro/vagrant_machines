@@ -12,3 +12,5 @@ first_ip=10
 ```
 
 **Note** - First IP will be assigned to ProxySQL and following IP's to PXC nodes 
+
+MySQL `root` password is `sekret`

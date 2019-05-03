@@ -1,15 +1,16 @@
 #!/bin/bash
 yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
 yum -y install epel-release
-yum -y install tar gdb strace vim qpress socat Percona-Server-server-57 git perl-DBD-MySQL perl-Module-Install
+yum -y install tar gdb strace vim qpress socat Percona-Server-server-57 git perl-DBD-MySQL perl-Module-Install https://github.com/yoshinorim/mha4mysql-node/releases/download/v0.58/mha4mysql-node-0.58-0.el7.centos.noarch.rpm
 iptables -F
 setenforce 0
 mysqld --initialize-insecure --user=mysql
 NODE_NR=$1
 NODE_IP="$2"
 MASTER_IP="$3"
-ALL_IPS="$4"
-
+NODES="$4"
+BASE_IP="$5"
+FIRST_IP="$6"
 #MySQL
 
 cat << EOF > /etc/my.cnf
@@ -62,12 +63,15 @@ EOF
 	mysql -e "START SLAVE"
 fi
 
+cat << EOF >> /etc/hosts
+$BASE_IP$FIRST_IP       mha
+EOF
 
-#MHA
-cd /tmp
-git clone https://github.com/yoshinorim/mha4mysql-node.git
-cd mha4mysql-node
-perl Makefile.PL
-make
-make install
+for (( i=1; i <=$NODES; i++))
+do
+((FIRST_IP++))
+        cat << EOF >> /etc/hosts
+$BASE_IP$FIRST_IP       node$i
+EOF
+done
 mkdir -p /var/log/masterha/app1

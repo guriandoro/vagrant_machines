@@ -8,7 +8,7 @@ base_ip="192.168.35."
 first_ip=90
 
 # number of proxies
-number_of_proxies=2
+number_of_proxies=3
 
 # the number of pxc nodes
 number_of_nodes=3
@@ -59,10 +59,10 @@ Vagrant.configure(2) do |config|
       proxy.vm.box = "centos/7"
       proxy.vm.host_name = "proxysql-#{i}"
       proxy.vm.network "private_network", ip:proxy_ips[i-1]
-      proxy.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "2048"]
-        vb.customize ["modifyvm", :id, "--cpus", "2"]
-      end
+ #     proxy.vm.provider :virtualbox do |vb|
+  #     vb.customize ["modifyvm", :id, "--memory", "2048"]
+   #     vb.customize ["modifyvm", :id, "--cpus", "2"]
+    #  end
 
       # remove the first ip from ips (proxy ip)
       proxy.vm.provision :shell do |s|

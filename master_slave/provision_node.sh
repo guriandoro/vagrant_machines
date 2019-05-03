@@ -1,6 +1,9 @@
 #!/bin/bash
-yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-yum -y install tar gdb strace vim qpress socat Percona-Server-server-57
+#yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+#yum -y install tar gdb strace vim qpress socat Percona-Server-server-57
+yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm
+yum -y install tar gdb strace vim qpress socat mysql-community-server
+#yum -y install tar gdb strace vim qpress socat percona-toolkit tcpdump Percona-Server-server-55
 iptables -F
 setenforce 0
 mysqld --initialize-insecure --user=mysql
@@ -23,13 +26,10 @@ socket                              = /var/lib/mysql/mysql.sock
 datadir=/var/lib/mysql
 user=mysql
 
-innodb_locks_unsafe_for_binlog=1
-innodb_autoinc_lock_mode=2
 innodb_file_per_table=1
 innodb-log-file-size = 256M
 innodb-flush-log-at-trx-commit = 2
 innodb-buffer-pool-size = 512M
-innodb_use_native_aio = 0
 
 server_id=$NODE_NR
 binlog_format = ROW
@@ -41,17 +41,18 @@ EOF
 
 if [[ $NODE_NR -eq 1 ]]
 then
-	systemctl start mysql
-
-	mysql -e "grant all privileges on *.* to 'root'@'192.%' identified by 'sekret';"
-	mysql -e "grant all privileges on *.* to 'root'@'127.0.0.1' identified by 'sekret';"
-	mysql -e "grant all privileges on *.* to 'root'@'localhost' identified by 'sekret';"
+	systemctl start mysqld
+	mysql -e "CREATE USER root@'192.%' identified by 'sekret'"
+	mysql -e "grant all privileges on *.* to 'root'@'192.%';"
+	mysql -e "CREATE USER root@'127.0.0.1' identified by 'sekret'"
+	mysql -e "SET PASSWORD FOR 'root'@'127.0.0.1' = 'sekret';"
+	mysql -e "SET PASSWORD FOR 'root'@'localhost' = 'sekret';"
 else
 
 	cat << EOF >> /etc/my.cnf
 read_only=1
 EOF
-	systemctl start mysql
+	systemctl start mysqld
 
 	mysql -e "CHANGE MASTER TO MASTER_HOST='$MASTER_IP', MASTER_USER='root', MASTER_PASSWORD='sekret', MASTER_LOG_FILE='node_1.000001'"
 	mysql -e "START SLAVE"

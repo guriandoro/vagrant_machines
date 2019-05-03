@@ -7,6 +7,8 @@ base_ip="192.168.21."
 # first ip to be used
 first_ip=60
 
+#variable to hold incremental ips
+ip=first_ip
 # the number of pxc nodes
 number_of_slaves=2
 
@@ -18,8 +20,8 @@ ips = [ "#{base_ip}#{first_ip}" ]
 
 # build the list of ips for each node and gcomm address
 (1..number_of_slaves).each do |a|
-  first_ip += 1
-  ips.push("#{base_ip}#{first_ip}")
+  ip += 1
+  ips.push("#{base_ip}#{ip}")
 end
 
 Vagrant.configure(2) do |config|
@@ -37,7 +39,7 @@ Vagrant.configure(2) do |config|
       end
       node.vm.provision :shell do |s|
         s.path = "provision_node.sh"
-        s.args = [i, ips[i], ips[1]]
+        s.args = [i, ips[i], ips[1], number_of_slaves, base_ip, first_ip]
       end
     end
   end
@@ -53,7 +55,7 @@ Vagrant.configure(2) do |config|
     # remove the first ip from ips (proxy ip)
     mha.vm.provision :shell do |s|
       s.path = "provision_mha.sh"
-      s.args = number_of_slaves
+      s.args = [number_of_slaves, base_ip, first_ip]
     end
   end
 end

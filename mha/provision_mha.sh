@@ -1,23 +1,12 @@
 #!/bin/bash
 yum install -y epel-release
-yum install -y git perl-DBD-MySQL perl-Module-Install perl-Config-Tiny perl-Log-Dispatch perl-Parallel-ForkManager
+yum install -y git perl-DBD-MySQL perl-Module-Install perl-Config-Tiny perl-Log-Dispatch perl-Parallel-ForkManager https://github.com/yoshinorim/mha4mysql-manager/releases/download/v0.58/mha4mysql-manager-0.58-0.el7.centos.noarch.rpm https://github.com/yoshinorim/mha4mysql-node/releases/download/v0.58/mha4mysql-node-0.58-0.el7.centos.noarch.rpm
 iptables -F
 setenforce 0
 
 NODES=$1
-
-cd /tmp
-git clone https://github.com/yoshinorim/mha4mysql-node.git
-cd mha4mysql-node
-perl Makefile.PL
-make
-make install
-cd ..
-git clone https://github.com/yoshinorim/mha4mysql-manager.git
-cd mha4mysql-manager
-perl Makefile.PL
-make
-make install
+BASE_IP=$2
+FIRST_IP=$3
 
 cat << EOF > /etc/app1.cnf
 [server default]
@@ -40,6 +29,10 @@ do
 	cat << EOF >> /etc/app1.cnf
   [server$i]
   hostname=node$i
+EOF
+((FIRST_IP++))
+	cat << EOF >> /etc/hosts
+$BASE_IP$FIRST_IP	node$i
 EOF
 done
 mkdir -p /var/log/masterha/app1

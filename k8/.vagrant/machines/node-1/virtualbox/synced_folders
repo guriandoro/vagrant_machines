@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/marcelo.altmann/vagrant/vagrant_machines/k8","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}},"virtualbox":{"/shared":{"guestpath":"/shared","hostpath":"/home/marcelo.altmann/vagrant/vagrant_machines/k8","disabled":false,"__vagrantfile":true}}}

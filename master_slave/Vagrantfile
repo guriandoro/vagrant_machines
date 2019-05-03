@@ -8,7 +8,7 @@ base_ip="192.168.21."
 first_ip=60
 
 # the number of pxc nodes
-number_of_slaves=2
+number_of_slaves=1
 
 #one server is the master
 number_of_slaves += 1

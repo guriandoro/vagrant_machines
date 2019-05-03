@@ -1,8 +1,6 @@
 #!/bin/bash
 yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-yum -y install tar gdb strace vim qpress socat Percona-XtraDB-Cluster-server-57
-
-#yum -y install tar gdb strace vim qpress socat Percona-XtraDB-Cluster-client-57-5.7.16-27.19.1.el7.x86_64 Percona-XtraDB-Cluster-server-57-5.7.16-27.19.1.el7.x86_64 Percona-XtraDB-Cluster-shared-57-5.7.16-27.19.1.el7.x86_64 Percona-XtraDB-Cluster-shared-compat-57-5.7.16-27.19.1.el7.x86_64
+yum -y install tar gdb strace vim qpress socat Percona-Server-server-57
 #yum -y install tar gdb strace vim qpress socat Percona-XtraDB-Cluster-client-57-5.7.17-27.20.2.el7.x86_64 Percona-XtraDB-Cluster-server-57-5.7.17-27.20.2.el7.x86_64 Percona-XtraDB-Cluster-shared-57-5.7.17-27.20.2.el7.x86_64 Percona-XtraDB-Cluster-shared-compat-57-5.7.17-27.20.2.el7.x86_64 
 #yum install -y tar gdb strace vim qpress socat Percona-XtraDB-Cluster-client-57-5.7.19-29.22.3.el7.x86_64 Percona-XtraDB-Cluster-server-57-5.7.19-29.22.3.el7.x86_64 Percona-XtraDB-Cluster-shared-57-5.7.19-29.22.3.el7.x86_64 Percona-XtraDB-Cluster-shared-compat-57-5.7.19-29.22.3.el7.x86_64 
 iptables -F
@@ -28,54 +26,38 @@ socket                              = /var/lib/mysql/mysql.sock
 datadir=/var/lib/mysql
 user=mysql
 
-
-wsrep_cluster_name=pxc_test
-
-wsrep_provider=/usr/lib64/libgalera_smm.so
-wsrep_provider_options              = "gcs.fc_limit=500; gcs.fc_master_slave=YES; gcs.fc_factor=1.0; gcache.size=256M;"
-wsrep_slave_threads = 1
-wsrep_auto_increment_control        = ON
-
-wsrep_sst_method=xtrabackup-v2
-wsrep_sst_auth=root:sekret
-
-wsrep_cluster_address=gcomm://$IPS_COMMA
-wsrep_node_address=$NODE_IP
-wsrep_node_name=node$NODE_NR
-
-
-innodb_locks_unsafe_for_binlog=1
-innodb_autoinc_lock_mode=2
-innodb_file_per_table=1
-innodb-log-file-size = 256M
-innodb-flush-log-at-trx-commit = 2
-innodb-buffer-pool-size = 3G
-innodb_use_native_aio = 0
-
-server_id=1
-binlog_format = ROW
-log_slave_updates
-enforce_gtid_consistency=1
-gtid_mode=on
-
-#pxc-encrypt-cluster-traffic = ON
-#early-plugin-load=keyring_file.so
-#keyring-file-data=/var/lib/mysql-keyring/keyring
-
-[sst]
-streamfmt=xbstream
-
-[xtrabackup]
-#keyring-file-data=/var/lib/mysql-keyring/keyring
-compress
-parallel=2
-compress-threads=2
-rebuild-threads=2
+server_id=$NODE_NR
+report-host=$NODE_IP
+gtid_mode=ON
+enforce_gtid_consistency=ON
+master_info_repository=TABLE
+relay_log_info_repository=TABLE
+binlog_checksum=NONE
+log_slave_updates=ON
+log_bin=binlog
+binlog_format=ROW
+transaction_write_set_extraction=XXHASH64
+loose-group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+loose-group_replication_start_on_boot=off
+loose-group_replication_local_address= "$NODE_IP:24901"
+loose-group_replication_group_seeds= "$IPS_COMMA"
+loose-group_replication_bootstrap_group=off
 EOF
 
 if [[ $NODE_NR -eq 1 ]]
 then
-	systemctl start mysql@bootstrap
+	systemctl start mysql
+
+
+	#group replication
+	mysql -e "SET SQL_LOG_BIN=0;
+CREATE USER rpl_user@'%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO rpl_user@'%';
+SET SQL_LOG_BIN=1;
+CHANGE MASTER TO MASTER_USER='rpl_user', MASTER_PASSWORD='password' FOR CHANNEL 'group_replication_recovery';"
+	mysql -e "INSTALL PLUGIN group_replication SONAME 'group_replication.so';"
+	mysql -e "SET GLOBAL group_replication_bootstrap_group=ON;START GROUP_REPLICATION;SET GLOBAL group_replication_bootstrap_group=OFF;"
+	
 
 	mysql -e "grant all privileges on *.* to 'root'@'192.%' identified by 'sekret';"
 	mysql -e "grant all privileges on *.* to 'root'@'127.0.0.1' identified by 'sekret';"
@@ -87,6 +69,13 @@ else
 		if [[ "$MYSQLADMIN" == "mysqld is alive" ]]
 		then 
 			systemctl start mysql
+			mysql -e "SET SQL_LOG_BIN=0;
+CREATE USER rpl_user@'%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO rpl_user@'%';
+SET SQL_LOG_BIN=1;
+CHANGE MASTER TO MASTER_USER='rpl_user', MASTER_PASSWORD='password' FOR CHANNEL 'group_replication_recovery';"
+        mysql -e "INSTALL PLUGIN group_replication SONAME 'group_replication.so';"
+        mysql -e "START GROUP_REPLICATION;"
 			exit
 		else
 			sleep 5

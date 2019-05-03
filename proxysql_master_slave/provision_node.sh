@@ -44,14 +44,14 @@ then
 	systemctl start mysql
 
         # ProxySQL users
-        mysql -e "CREATE USER 'monitor'@'%' IDENTIFIED BY 'monitor';"
-        mysql -e "GRANT USAGE ON *.* TO 'monitor'@'%';"
-        mysql -e "CREATE USER 'monitor'@'localhost' IDENTIFIED BY 'monitor';"
-        mysql -e "GRANT USAGE ON *.* TO 'monitor'@'localhost';"
-        mysql -e "CREATE USER 'app'@'%' IDENTIFIED BY 'app';"
-        mysql -e "GRANT ALL ON *.* TO 'app'@'%';"
-        mysql -e "CREATE USER 'app'@'localhost' IDENTIFIED BY 'app';"
-        mysql -e "GRANT ALL ON *.* TO 'app'@'localhost';"
+#        mysql -e "CREATE USER 'monitor'@'%' IDENTIFIED BY 'monitor';"
+#        mysql -e "GRANT USAGE ON *.* TO 'monitor'@'%';"
+#        mysql -e "CREATE USER 'monitor'@'localhost' IDENTIFIED BY 'monitor';"
+#        mysql -e "GRANT USAGE ON *.* TO 'monitor'@'localhost';"
+#        mysql -e "CREATE USER 'app'@'%' IDENTIFIED BY 'app';"
+#        mysql -e "GRANT ALL ON *.* TO 'app'@'%';"
+#        mysql -e "CREATE USER 'app'@'localhost' IDENTIFIED BY 'app';"
+#        mysql -e "GRANT ALL ON *.* TO 'app'@'localhost';"
 
 
 

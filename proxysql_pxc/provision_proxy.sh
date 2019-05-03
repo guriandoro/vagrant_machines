@@ -51,5 +51,5 @@ $MYSQL "LOAD PROXYSQL SERVERS TO RUNTIME; SAVE PROXYSQL SERVERS TO DISK;"
 
 
 # getting my version of the tool while the Pr isnt approved
-wget https://raw.githubusercontent.com/altmannmarcelo/proxysql-admin-tool/v1.4.9-dev/proxysql-admin -O /bin/proxysql-admin
-proxysql-admin --config-file=/etc/proxysql-admin.cnf --without-check-monitor-user --without-cluster-app-user --syncusers --write-node="$WRITE_NODE" --enable
+#wget https://raw.githubusercontent.com/altmannmarcelo/proxysql-admin-tool/v1.4.9-dev/proxysql-admin -O /bin/proxysql-admin
+proxysql-admin --config-file=/etc/proxysql-admin.cnf --without-cluster-app-user --syncusers --write-node="$WRITE_NODE" --enable

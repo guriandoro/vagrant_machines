@@ -18,7 +18,7 @@ MHA Basics:
 
 ```
 masterha_check_ssh --conf=/etc/app1.cnf
-masterha_check_ssh --conf=/etc/app1.cnf
+masterha_check_repl --conf=/etc/app1.cnf
 masterha_manager --conf=/etc/app1.cnf --remove_dead_master_conf
 masterha_master_switch --master_state=alive --conf=/etc/app1.cnf  --orig_master_is_new_slave
 ```

@@ -1,5 +1,6 @@
 #!/bin/bash
-yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+yum -y install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+percona-release setup ps57
 yum -y install tar gdb strace vim qpress socat Percona-Server-server-57
 iptables -F
 setenforce 0

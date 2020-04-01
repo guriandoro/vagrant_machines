@@ -36,6 +36,9 @@ Vagrant.configure(2) do |config|
 #        end
       end
       node.vm.provision :shell do |s|
+        s.path = "../common/setup_percona_repo.sh"
+      end
+      node.vm.provision :shell do |s|
         s.path = "provision_node.sh"
         s.args = [i, ips[i], ips[1]]
       end

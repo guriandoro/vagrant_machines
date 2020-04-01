@@ -2,13 +2,13 @@
 # vi: set ft=ruby :
 
 # base of ips that will be user
-base_ip="192.168.41."
+base_ip="192.167.41."
 
 # first ip to be used
 first_ip=30
 
-# the number of pxc nodes
-number_of_nodes=2
+# the number of worker nodes
+number_of_nodes=3
 
 # one node is master
 number_of_nodes += 1
@@ -23,9 +23,14 @@ end
 
 Vagrant.configure(2) do |config|
   (1..number_of_nodes).each do |i|
-    config.vm.define "node-#{i}" do |node|
+    if i == 1
+      node_name='kmaster'
+    else
+      node_name="worker-#{i-1}"
+    end
+    config.vm.define "#{node_name}" do |node|
       node.vm.box = "centos/7"
-      node.vm.host_name = "node#{i}"
+      node.vm.host_name = "#{node_name}"
       node.vm.network "private_network", ip:ips[i]
       node.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "8192"]

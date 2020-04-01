@@ -25,20 +25,27 @@ gcomm_address=""
   gcomm_address="#{gcomm_address}#{base_ip}#{first_ip}"
   first_ip += 1
 end
-ssh_port=235
+ssh_port=224
 Vagrant.configure(2) do |config|
   (1..number_of_nodes).each do |i|
     config.vm.define "node-#{i}" do |node|
       node.vm.box = "centos/7"
-      node.vm.host_name = "node#{i}"
+      node.vm.host_name = "marcelo-altmann-new-hire#{i}"
       node.vm.network "private_network", ip:ips[i]
       node.vm.network :forwarded_port, guest: 22, host: "#{ssh_port}#{i}", id: "ssh"
       node.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "4096"]
-        vb.customize ["modifyvm", :id, "--cpus", "2"]
-#        if i == 3
-#	  vb.customize ["modifyvm", :id, "--cpuexecutioncap", "75"]
-#        end
+        if i == 1
+          vb.customize ["modifyvm", :id, "--memory", "4096"]
+          vb.customize ["modifyvm", :id, "--cpus", "4"]
+        end
+        if i == 2
+          vb.customize ["modifyvm", :id, "--memory", "4096"]
+          vb.customize ["modifyvm", :id, "--cpus", "2"]
+        end
+        if i == 3
+          vb.customize ["modifyvm", :id, "--memory", "4096"]
+          vb.customize ["modifyvm", :id, "--cpus", "2"]
+        end
       end
       node.vm.provision :shell do |s|
         s.path = "provision_node.sh"

@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Configure hosts 
+echo "[TASK 0] Configure hosts"
 NODE_NR=$1
 NODE_IP="$2"
 MASTER_IP="$3"
@@ -23,54 +26,97 @@ sudo modprobe br_netfilter
 sleep 1
 sudo echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 
+# Install docker from Docker-ce repository
+echo "[TASK 1] Install docker container engine"
+yum install -y -q yum-utils device-mapper-persistent-data lvm2 > /dev/null 2>&1
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
+yum install -y -q docker-ce-18.06.0.ce-3.el7 >/dev/null 2>&1
 
-yum install -y yum-utils device-mapper-persistent-data lvm2
+# Enable docker service
+echo "[TASK 2] Enable and start docker service"
+systemctl enable docker >/dev/null 2>&1
+systemctl start docker
 
-
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-
-yum install -y docker-ce
-
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+# Add yum repo file for Kubernetes
+echo "[TASK 3] Add yum repo file for kubernetes"
+cat >>/etc/yum.repos.d/kubernetes.repo<<EOF
 [kubernetes]
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
 enabled=1
 gpgcheck=1
-repo_gpgcheck=1
+repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-yum install -y kubelet kubeadm kubectl
+# Install Kubernetes
+echo "[TASK 4] Install Kubernetes (kubeadm, kubelet and kubectl)"
+yum install -y -q kubeadm kubelet kubectl >/dev/null 2>&1
 
-systemctl restart docker && systemctl enable docker
-systemctl  restart kubelet && systemctl enable kubelet
+# Start and Enable kubelet service
+echo "[TASK 5] Enable and start kubelet service"
+systemctl enable kubelet >/dev/null 2>&1
+echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/sysconfig/kubelet
+systemctl start kubelet >/dev/null 2>&1
 
-if [[ $NODE_NR -eq 1 ]]
+# Install Openssh server
+echo "[TASK 6] Install and configure ssh"
+yum install -y -q openssh-server >/dev/null 2>&1
+systemctl enable sshd >/dev/null 2>&1
+systemctl start sshd >/dev/null 2>&1
+
+# Set Root password
+echo "[TASK 7] Set root password"
+echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
+
+# Install additional required packages
+echo "[TASK 8] Install additional packages"
+yum install -y -q which net-tools sudo sshpass less >/dev/null 2>&1
+
+
+#######################################
+# To be executed only on master nodes #
+#######################################
+
+if [[ $(hostname) =~ .*master.* ]]
 then
-  kubeadm init --apiserver-advertise-address=$MASTER_IP --pod-network-cidr=192.167.54.0/16 | grep 'kubeadm join' > /shared/join_cmd 
-  mkdir -p $HOME/.kube
-  cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-  chown $(id -u):$(id -g) $HOME/.kube/config
 
+  # Initialize Kubernetes
+  echo "[TASK 9] Initialize Kubernetes Cluster"
+#  kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification >> /root/kubeinit.log 2>&1
 
-  export kubever=$(kubectl version | base64 | tr -d '\n')
-  kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
-  curl https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz -o helm-v2.11.0-linux-amd64.tar.gz
+  kubeadm init --apiserver-advertise-address=$MASTER_IP --pod-network-cidr=192.167.0.0/16 --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification >> /root/kubeinit.log 2>&1
 
-  tar -zxvf helm-v2.11.0-linux-amd64.tar.gz
-  cp linux-amd64/tiller /usr/bin/
-  cp linux-amd64/helm /usr/bin/
+  # Copy Kube admin config
+  echo "[TASK 10] Copy kube admin config to root user .kube directory"
+  mkdir /root/.kube
+  cp /etc/kubernetes/admin.conf /root/.kube/config
 
-  helm init
-  kubectl create serviceaccount --namespace kube-system tiller
-  kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-  kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'      
-  helm init --service-account tiller --upgrade
+  # Deploy flannel network
+  echo "[TASK 11] Deploy flannel network"
+  kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /dev/null 2>&1
 
-else
-  cat /shared/join_cmd | /bin/bash
+  # Generate Cluster join command
+  echo "[TASK 12] Generate and save cluster join command to /joincluster.sh"
+  joinCommand=$(kubeadm token create --print-join-command) 
+  echo "$joinCommand --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification" > /shared/joincluster.sh
+
 fi
 
+#######################################
+# To be executed only on worker nodes #
+#######################################
 
+if [[ $(hostname) =~ .*worker.* ]]
+then
+
+  # Join worker nodes to the Kubernetes cluster
+  echo "[TASK 9] Join node to Kubernetes Cluster"
+  cat /shared/joincluster.sh | /bin/bash
+  kubectl label node $(hostname) node-role.kubernetes.io/worker=worker
+
+  # Create data directory
+  echo "[TASK 10] Create the /mnt/data folder"
+  mkdir -p /mnt/data >/dev/null 2>&1
+fi

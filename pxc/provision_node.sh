@@ -1,5 +1,5 @@
 #!/bin/bash
-yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+yum -y install yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 yum -y install tar gdb strace vim qpress socat Percona-XtraDB-Cluster-server-57
 
 #yum -y install tar gdb strace vim qpress socat Percona-XtraDB-Cluster-client-57-5.7.16-27.19.1.el7.x86_64 Percona-XtraDB-Cluster-server-57-5.7.16-27.19.1.el7.x86_64 Percona-XtraDB-Cluster-shared-57-5.7.16-27.19.1.el7.x86_64 Percona-XtraDB-Cluster-shared-compat-57-5.7.16-27.19.1.el7.x86_64

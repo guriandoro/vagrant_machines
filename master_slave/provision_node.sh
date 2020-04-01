@@ -1,8 +1,8 @@
 #!/bin/bash
 #yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-#yum -y install tar gdb strace vim qpress socat Percona-Server-server-57
-yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm
-yum -y install tar gdb strace vim qpress socat mysql-community-server
+yum -y install tar gdb strace vim percona-server-server
+#yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm
+#yum -y install tar gdb strace vim qpress socat mysql-community-server
 #yum -y install tar gdb strace vim qpress socat percona-toolkit tcpdump Percona-Server-server-55
 iptables -F
 setenforce 0

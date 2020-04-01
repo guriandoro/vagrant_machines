@@ -1,0 +1,75 @@
+#!/bin/bash
+NODE_NR=$1
+NODE_IP="$2"
+MASTER_IP="$3"
+NUMBER_OF_NODES="$4"
+MASTER_SUBNET=$(echo $MASTER_IP| awk -F'.' '{print $1"."$2"."$3".0/24"}')
+BASE_IP=$(echo $MASTER_IP| awk -F'.' '{print $1"."$2"."$3"."}')
+INCREMENT_IP=$(echo $MASTER_IP| awk -F'.' '{print $4}')
+for i in `seq 1 $NUMBER_OF_NODES`;
+do
+cat <<EOF >> /etc/hosts
+${BASE_IP}${INCREMENT_IP} node${i}
+EOF
+let INCREMENT_IP+=1
+done
+sudo setenforce 0
+sudo sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+sudo swapoff -a
+sudo sed -i 's/\/swapfile/\#\/swapfile/g' /etc/fstab
+
+sudo modprobe br_netfilter
+sleep 1
+sudo echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+
+yum install -y yum-utils device-mapper-persistent-data lvm2
+
+
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install -y -q docker-ce-18.06.0.ce-3.el7 >/dev/null 2>&1
+
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+yum install -y kubelet kubeadm kubectl
+
+systemctl restart docker && systemctl enable docker
+systemctl  restart kubelet && systemctl enable kubelet
+
+if [[ $NODE_NR -eq 1 ]]
+then
+  kubeadm init --apiserver-advertise-address=$MASTER_IP --pod-network-cidr=192.167.54.0/16 | grep 'kubeadm join' > /shared/join_cmd 
+  mkdir -p $HOME/.kube
+  cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+  export kubever=$(kubectl version | base64 | tr -d '\n')
+  kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+  curl https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz -o helm-v2.11.0-linux-amd64.tar.gz
+
+  tar -zxvf helm-v2.11.0-linux-amd64.tar.gz
+  cp linux-amd64/tiller /usr/bin/
+  cp linux-amd64/helm /usr/bin/
+
+  helm init
+  kubectl create serviceaccount --namespace kube-system tiller
+  kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+  kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'      
+  helm init --service-account tiller --upgrade
+
+else
+  cat /shared/join_cmd | /bin/bash
+fi
+
+

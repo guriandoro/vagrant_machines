@@ -1,5 +1,5 @@
 #!/bin/bash
-yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+yum -y install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 yum -y install epel-release
 yum -y install tar gdb strace vim qpress socat Percona-Server-server-57 git perl-DBD-MySQL perl-Module-Install https://github.com/yoshinorim/mha4mysql-node/releases/download/v0.58/mha4mysql-node-0.58-0.el7.centos.noarch.rpm
 iptables -F

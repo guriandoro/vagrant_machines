@@ -1,0 +1,320 @@
+Mon Aug 12 18:18:38 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.028s
+user	0m0.015s
+sys	0m0.006s
+Mon Aug 12 18:18:55 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.025s
+user	0m0.013s
+sys	0m0.007s
+Mon Aug 12 18:19:54 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.034s
+user	0m0.016s
+sys	0m0.007s
+Mon Aug 12 18:19:59 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.023s
+user	0m0.012s
+sys	0m0.004s
+Mon Aug 12 18:20:04 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.041s
+user	0m0.023s
+sys	0m0.008s
+Mon Aug 12 18:20:10 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.032s
+user	0m0.016s
+sys	0m0.006s
+Mon Aug 12 18:20:15 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.033s
+user	0m0.019s
+sys	0m0.004s
+Mon Aug 12 18:20:20 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.035s
+user	0m0.019s
+sys	0m0.007s
+Mon Aug 12 18:20:25 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.028s
+user	0m0.016s
+sys	0m0.003s
+Mon Aug 12 18:20:30 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.032s
+user	0m0.016s
+sys	0m0.004s
+Mon Aug 12 18:20:35 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.034s
+user	0m0.016s
+sys	0m0.006s
+Mon Aug 12 18:20:40 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.034s
+user	0m0.018s
+sys	0m0.006s
+Mon Aug 12 18:20:54 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.030s
+user	0m0.016s
+sys	0m0.004s
+Mon Aug 12 18:20:59 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.030s
+user	0m0.014s
+sys	0m0.006s
+Mon Aug 12 18:21:04 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.033s
+user	0m0.013s
+sys	0m0.008s
+Mon Aug 12 18:21:09 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.026s
+user	0m0.012s
+sys	0m0.006s
+Mon Aug 12 18:21:14 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.033s
+user	0m0.017s
+sys	0m0.007s
+Mon Aug 12 18:21:19 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.039s
+user	0m0.018s
+sys	0m0.009s
+Mon Aug 12 18:21:24 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.030s
+user	0m0.020s
+sys	0m0.002s
+Mon Aug 12 18:21:29 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.025s
+user	0m0.011s
+sys	0m0.006s
+Mon Aug 12 18:21:34 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.032s
+user	0m0.010s
+sys	0m0.008s
+Mon Aug 12 18:21:39 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.032s
+user	0m0.018s
+sys	0m0.005s
+Mon Aug 12 18:21:44 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.031s
+user	0m0.018s
+sys	0m0.004s
+Mon Aug 12 18:21:49 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.034s
+user	0m0.020s
+sys	0m0.004s
+Mon Aug 12 18:21:54 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.025s
+user	0m0.015s
+sys	0m0.004s
+Mon Aug 12 18:22:00 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.035s
+user	0m0.015s
+sys	0m0.006s
+Mon Aug 12 18:22:06 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.034s
+user	0m0.019s
+sys	0m0.004s
+Mon Aug 12 18:22:13 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.033s
+user	0m0.016s
+sys	0m0.011s
+Mon Aug 12 18:22:19 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.032s
+user	0m0.020s
+sys	0m0.004s
+Mon Aug 12 18:22:25 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.030s
+user	0m0.013s
+sys	0m0.007s
+Mon Aug 12 18:22:31 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.035s
+user	0m0.016s
+sys	0m0.009s
+Mon Aug 12 18:22:36 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.023s
+user	0m0.009s
+sys	0m0.006s
+Mon Aug 12 18:22:41 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.037s
+user	0m0.016s
+sys	0m0.013s
+Mon Aug 12 18:22:46 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.033s
+user	0m0.020s
+sys	0m0.005s
+Mon Aug 12 18:22:51 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.035s
+user	0m0.019s
+sys	0m0.005s
+Mon Aug 12 18:22:56 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.034s
+user	0m0.019s
+sys	0m0.006s
+Mon Aug 12 18:23:01 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.028s
+user	0m0.016s
+sys	0m0.004s
+Mon Aug 12 18:23:06 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.029s
+user	0m0.016s
+sys	0m0.006s
+Mon Aug 12 18:23:11 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.025s
+user	0m0.014s
+sys	0m0.004s
+Mon Aug 12 18:23:16 UTC 2019
+mysql: [Warning] Using a password on the command line interface can be insecure.
+viable_candidate	read_only	transactions_behind
+YES	YES	0
+
+real	0m0.032s
+user	0m0.017s
+sys	0m0.006s

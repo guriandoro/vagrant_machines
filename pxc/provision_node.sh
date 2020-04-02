@@ -2,12 +2,12 @@
 
 #yum -y install tar gdb strace vim qpress socat git wget
 #yum -y groupinstall "Development Tools"
-yum -y install vim socat qpress sysbench
+yum -y install vim socat qpress
 
 yum -y install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 percona-release enable-only pxc-80 experimental
 percona-release enable tools release
-yum -y install percona-xtradb-cluster
+yum -y install percona-xtradb-cluster sysbench
 
 iptables -F
 setenforce 0
